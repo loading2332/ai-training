@@ -1,0 +1,39 @@
+services:
+  api:
+    image: gstride-api:${DEPLOY_SHA:?请设置 DEPLOY_SHA}
+    build:
+      context: ..
+      dockerfile: api/Dockerfile
+    restart: unless-stopped
+    environment:
+      MODEL_RELEASE_DIR: /app/model_release
+    volumes:
+      - type: bind
+        source: ${MODEL_RELEASE_DIR:?请设置 MODEL_RELEASE_DIR}
+        target: /app/model_release
+        read_only: true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      retries: 6
+      start_period: 20s
+
+  web:
+    image: gstride-web:${DEPLOY_SHA:?请设置 DEPLOY_SHA}
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+

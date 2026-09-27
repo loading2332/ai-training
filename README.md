@@ -87,3 +87,5 @@ D:\anaconda3\python.exe -m unittest discover -s tests
 ## 前端评估工作台
 
 `frontend/` 提供六项步态参数录入、真实模型评分和贡献解释图。运行步骤见 [前端说明](frontend/README.md) 与 [API 说明](api/README.md)。当前以项目演示为范围，不包含设备接入、历史保存和报告导出。
+
+部署到 Linux 服务器并通过 GitHub Actions 手动更新的步骤见 [部署说明](docs/deployment/github_actions_server.md)。
