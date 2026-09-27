@@ -4,6 +4,8 @@ services:
     build:
       context: ..
       dockerfile: api/Dockerfile
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
     restart: unless-stopped
     environment:
       MODEL_RELEASE_DIR: /app/model_release
@@ -24,6 +26,8 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
+      args:
+        NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmmirror.com}
     restart: unless-stopped
     ports:
       - "${WEB_PORT:-8080}:80"
@@ -36,4 +40,3 @@ services:
       timeout: 5s
       retries: 6
       start_period: 10s
-
