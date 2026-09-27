@@ -35,7 +35,8 @@ docker compose -p gstride -f ~/gstride/current/deploy/compose.yml ps
 curl -fsS http://127.0.0.1:8080/api/health
 ```
 
+服务器构建镜像时默认从清华 PyPI 镜像和 npmmirror 下载依赖。如果服务器连接其他源更快，可在执行部署脚本前设置 `PIP_INDEX_URL` 和 `NPM_REGISTRY` 环境变量；Docker Compose 会把它们传给镜像构建步骤。
+
 模型文件应单独备份 `~/gstride/model_release/model.joblib` 和 `manifest.json`。如果未来有意发布新模型，应先审查数据与训练配置，再走单独的模型发布流程；普通代码部署不会覆盖它们。
 
 当前方案按 IP 与端口提供 HTTP。若要录入真实个人数据，先配置域名、HTTPS 和访问控制。
-
